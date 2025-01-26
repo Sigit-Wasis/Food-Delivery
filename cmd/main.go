@@ -54,13 +54,6 @@ func main() {
 	app.Get("/restaurants", restaurantHandler.GetRestaurants)
 	app.Post("/restaurants", restaurantHandler.AddRestaurant)
 
-	// Tambahkan rute untuk modul users
-	userRepo := repository.NewUserRepository(db)
-	userService := service.NewUserService(userRepo)
-	userHandler := handler.NewUserHandler(userService)
-
-app.Post("/users/register", userHandler.RegisterUser)
-
 	// Jalankan server
 	log.Println("Server running on http://localhost:4000")
 	log.Fatal(app.Listen(":4000"))
