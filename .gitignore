@@ -1,0 +1,21 @@
+# Go binary files
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+.env
+
+# Build directories
+/bin/
+/obj/
+
+# IDE files
+.idea/
+/.vscode/
+
+# Dependency directories
+/vendor/
+
+# Go module cache
+/go/pkg/
