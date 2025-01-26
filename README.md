@@ -52,3 +52,16 @@ Clean Architecture:
 - **Service Layer**: Business logic.
 - **Repository Layer**: Data access (e.g., PostgreSQL).
 - **Entities**: Core domain objects.
+
+## Checklist Clean Code yang Baik
+Prinsip	Status	Catatan
+
+| **Aspek**                     | **Status** | **Keterangan**                                           |
+|-------------------------------|------------|---------------------------------------------------------|
+| **Separation of Concerns**    | ✅         | Sudah terpisah menjadi handler, service, repository, dan model |
+| **Konsistensi Error Handling**| ⚠️         | Pastikan semua error ditangani dengan cara yang sama     |
+| **Abstraksi dengan Interface**| ⚠️         | Gunakan interface pada service dan repository           |
+| **Middleware**                | ⚠️         | Gunakan middleware untuk validasi                       |
+| **Unit Testing**              | ⚠️         | Pastikan setiap lapisan memiliki pengujian              |
+| **Logging**                   | ✅         | Logging error di server untuk debugging                 |
+| **Status Code yang Tepat**    | ✅         | Gunakan status code yang sesuai untuk setiap jenis respons |
