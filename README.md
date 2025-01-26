@@ -49,8 +49,3 @@ Clean Architecture:
 - **Service Layer**: Business logic.
 - **Repository Layer**: Data access (e.g., PostgreSQL).
 - **Entities**: Core domain objects.
-
-
-## Directory Structure
-
-food-delivery/ ├── cmd/ # Contains the entry point of the application │ └── main.go # The main application entry point ├── internal/ # Contains the core business logic │ ├── restaurant/ # Restaurant module logic │ │ ├── handler/ # HTTP request handlers for restaurant │ │ │ └── restaurant_handler.go # Handles incoming requests for restaurant operations │ │ ├── service/ # Restaurant business logic │ │ │ └── restaurant_service.go # Contains the restaurant service logic │ │ ├── repository/ # Data access layer for restaurant module │ │ │ └── restaurant_repository.go # Interacts with the database for restaurant data │ │ └── models/ # Data models used for the restaurant module │ │ └── restaurant.go # Defines restaurant-related models │ └── database/ # Database configuration and connection │ └── db.go # Initializes and manages database connection └── go.mod # Go module for dependency management
