@@ -2,6 +2,9 @@
 
 A comprehensive food delivery system designed to manage the complete order process from restaurant menus to delivery.
 
+Building a Scalable Food Delivery System with Go
+- https://sigitwasis.medium.com/design-a-food-delivery-system-in-go-9d1049be2ab5
+
 ## Modules Overview
 
 ### 1. User Module
