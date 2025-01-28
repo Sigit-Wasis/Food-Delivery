@@ -1,52 +1,58 @@
-// internal/users/handler/user_handler.go
 package handler
 
 import (
-	"encoding/json"
 	"food-delivery/internal/users/models"
 	"food-delivery/internal/users/service"
-	"net/http"
+	"food-delivery/pkg/response"
+
+	"github.com/gofiber/fiber/v2"
 )
 
 type UserHandler struct {
 	Service *service.UserService
 }
 
+// NewUserHandler membuat instance baru dari UserHandler
 func NewUserHandler(service *service.UserService) *UserHandler {
 	return &UserHandler{Service: service}
 }
 
-func (h *UserHandler) RegisterUser(w http.ResponseWriter, r *http.Request) {
+// RegisterUser menangani pendaftaran user baru
+func (h *UserHandler) RegisterUser(c *fiber.Ctx) error {
 	var user models.User
-	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
-		http.Error(w, "Invalid input", http.StatusBadRequest)
-		return
+
+	// Decode body JSON
+	if err := c.BodyParser(&user); err != nil {
+		return response.SendResponse(c, response.NewErrorResponse(fiber.StatusBadRequest, "Invalid input", err.Error()))
 	}
 
+	// Panggil service untuk registrasi user
 	if err := h.Service.RegisterUser(user); err != nil {
-		http.Error(w, "Failed to register user", http.StatusInternalServerError)
-		return
+		return response.SendResponse(c, response.NewErrorResponse(fiber.StatusInternalServerError, "Failed to register user", err.Error()))
 	}
 
-	w.WriteHeader(http.StatusCreated)
+	// Kirim response sukses
+	return response.SendResponse(c, response.NewSuccessResponse(fiber.StatusCreated, "User registered successfully", nil))
 }
 
-func (h *UserHandler) LoginUser(w http.ResponseWriter, r *http.Request) {
+// LoginUser menangani login user
+func (h *UserHandler) LoginUser(c *fiber.Ctx) error {
 	var credentials struct {
 		Email    string `json:"email"`
 		Password string `json:"password"`
 	}
 
-	if err := json.NewDecoder(r.Body).Decode(&credentials); err != nil {
-		http.Error(w, "Invalid input", http.StatusBadRequest)
-		return
+	// Decode body JSON
+	if err := c.BodyParser(&credentials); err != nil {
+		return response.SendResponse(c, response.NewErrorResponse(fiber.StatusBadRequest, "Invalid input", err.Error()))
 	}
 
+	// Panggil service untuk login
 	user, err := h.Service.LoginUser(credentials.Email, credentials.Password)
 	if err != nil {
-		http.Error(w, "Invalid credentials", http.StatusUnauthorized)
-		return
+		return response.SendResponse(c, response.NewErrorResponse(fiber.StatusUnauthorized, "Invalid credentials", err.Error()))
 	}
 
-	json.NewEncoder(w).Encode(user)
+	// Kirim response sukses dengan data user
+	return response.SendResponse(c, response.NewSuccessResponse(fiber.StatusOK, "Login successful", user))
 }

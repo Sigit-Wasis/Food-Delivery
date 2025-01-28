@@ -7,6 +7,9 @@ import (
 	"food-delivery/internal/restaurant/handler"
 	"food-delivery/internal/restaurant/repository"
 	"food-delivery/internal/restaurant/service"
+	userHandler "food-delivery/internal/users/handler"
+	userRepository "food-delivery/internal/users/repository"
+	userService "food-delivery/internal/users/service"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -31,6 +34,11 @@ func main() {
 	restaurantService := service.NewRestaurantService(restaurantRepo)
 	restaurantHandler := handler.NewRestaurantHandler(restaurantService)
 
+	// Inisialisasi komponen user
+	userRepo := userRepository.NewUserRepository(db)
+	userService := userService.NewUserService(userRepo)
+	userHandler := userHandler.NewUserHandler(userService)
+
 	// Inisialisasi Fiber
 	app := fiber.New()
 
@@ -54,12 +62,9 @@ func main() {
 	app.Get("/restaurants", restaurantHandler.GetRestaurants)
 	app.Post("/restaurants", restaurantHandler.AddRestaurant)
 
-	// Tambahkan rute untuk modul users
-	userRepo := repository.NewUserRepository(db)
-	userService := service.NewUserService(userRepo)
-	userHandler := handler.NewUserHandler(userService)
-
-app.Post("/users/register", userHandler.RegisterUser)
+	// Rute untuk users
+	app.Get("/users", userHandler.LoginUser)
+	app.Post("/users", userHandler.RegisterUser)
 
 	// Jalankan server
 	log.Println("Server running on http://localhost:4000")
