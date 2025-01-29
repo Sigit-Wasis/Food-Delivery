@@ -2,28 +2,47 @@ package database
 
 import (
 	"database/sql"
+	"io/ioutil"
 	"log"
+	"path/filepath"
+	"sort"
 )
 
-// MigrateTables menjalankan migrasi tabel secara manual dengan SQL
-func MigrateTables(db *sql.DB) {
-	log.Println("Running migrations...")
+// RunMigrations menjalankan semua migrasi dari folder migrations
+func RunMigrations(db *sql.DB) {
+	migrationFolder := "migrations"
 
-	// Skrip SQL untuk membuat tabel `restaurants`
-	createRestaurantsTable := `
-	CREATE TABLE IF NOT EXISTS restaurants (
-		id SERIAL PRIMARY KEY,
-		name VARCHAR(255) NOT NULL,
-		address VARCHAR(255) NOT NULL,
-		cuisine_type VARCHAR(100) NOT NULL,
-		rating FLOAT DEFAULT 0
-	);`
-
-	// Jalankan skrip migrasi
-	_, err := db.Exec(createRestaurantsTable)
+	files, err := ioutil.ReadDir(migrationFolder)
 	if err != nil {
-		log.Fatalf("Failed to run migrations: %v", err)
+		log.Fatalf("Failed to read migration folder: %v", err)
 	}
 
-	log.Println("Migration completed successfully.")
+	// Urutkan berdasarkan nama file
+	sort.Slice(files, func(i, j int) bool {
+		return files[i].Name() < files[j].Name()
+	})
+
+	// Eksekusi tiap file
+	for _, file := range files {
+		if file.IsDir() {
+			continue
+		}
+
+		filePath := filepath.Join(migrationFolder, file.Name())
+		log.Printf("Executing migration: %s", filePath)
+
+		sqlContent, err := ioutil.ReadFile(filepath.Clean(filePath))
+		if err != nil {
+			log.Fatalf("Failed to read migration file %s: %v", file.Name(), err)
+		}
+
+		_, err = db.Exec(string(sqlContent))
+		if err != nil {
+			log.Fatalf("Failed to execute migration %s: %v", file.Name(), err)
+		}
+
+		log.Printf("Migration executed successfully: %s", file.Name())
+	}
+
+	log.Println("All migrations completed successfully.")
 }

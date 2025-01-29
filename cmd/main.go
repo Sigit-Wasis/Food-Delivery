@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 
+	"food-delivery/config"
 	"food-delivery/internal/database"
 	"food-delivery/internal/restaurant/handler"
 	"food-delivery/internal/restaurant/repository"
@@ -19,15 +20,15 @@ import (
 )
 
 func main() {
-	// Inisialisasi database
-	db, err := database.InitDB()
-	if err != nil {
-		log.Fatalf("Failed to connect to database: %v", err)
-	}
+	// Muat konfigurasi
+	cfg := config.LoadConfig()
+
+	// Hubungkan ke database
+	db := database.ConnectDatabase(cfg)
 	defer db.Close()
 
 	// Jalankan migrasi
-	database.MigrateTables(db)
+	database.RunMigrations(db)
 
 	// Inisialisasi komponen restoran
 	restaurantRepo := repository.NewRestaurantRepository(db)
