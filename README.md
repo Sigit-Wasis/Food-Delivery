@@ -65,3 +65,9 @@ Prinsip	Status	Catatan
 | **Unit Testing**              | ⚠️         | Pastikan setiap lapisan memiliki pengujian              |
 | **Logging**                   | ✅         | Logging error di server untuk debugging                 |
 | **Status Code yang Tepat**    | ✅         | Gunakan status code yang sesuai untuk setiap jenis respons |
+
+
+### **Contoh File `LICENSE` (MIT License)**
+MIT License
+
+Copyright (c) 2025 Sigit Wasis Subekti
