@@ -67,7 +67,6 @@ Prinsip	Status	Catatan
 | **Status Code yang Tepat**    | ✅         | Gunakan status code yang sesuai untuk setiap jenis respons |
 
 
-### **Contoh File `LICENSE` (MIT License)**
-MIT License
+## License
 
-Copyright (c) 2025 Sigit Wasis Subekti
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
