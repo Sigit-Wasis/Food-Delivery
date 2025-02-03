@@ -1,0 +1,9 @@
+basePath: /
+host: localhost:4000
+info:
+  contact: {}
+  description: API untuk layanan food delivery
+  title: Food Delivery API
+  version: "1.0"
+paths: {}
+swagger: "2.0"

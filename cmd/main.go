@@ -17,8 +17,15 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	_ "github.com/lib/pq" // Driver untuk PostgreSQL
+
+	fiberSwagger "github.com/swaggo/fiber-swagger"
 )
 
+// @title Food Delivery API
+// @version 1.0
+// @description API untuk layanan food delivery
+// @host localhost:4000
+// @BasePath /
 func main() {
 	// Muat konfigurasi
 	cfg := config.LoadConfig()
@@ -44,27 +51,62 @@ func main() {
 	app := fiber.New()
 
 	// Tambahkan Middleware
-	app.Use(logger.New())       // Logging untuk request
-	app.Use(recover.New())      // Menangani panic agar server tetap berjalan
+	app.Use(logger.New())      // Logging untuk request
+	app.Use(recover.New())     // Menangani panic agar server tetap berjalan
 	app.Use(cors.New(cors.Config{
-		AllowOrigins: "*",              // Bisa diatur ke domain tertentu
-		AllowMethods: "GET,POST,PUT",   // Metode HTTP yang diizinkan
+		AllowOrigins: "*",             // Bisa diatur ke domain tertentu
+		AllowMethods: "GET,POST,PUT",  // Metode HTTP yang diizinkan
 	}))
 
-	// Middleware Custom (contoh: autentikasi atau header default)
+	// Middleware Custom
 	app.Use(func(c *fiber.Ctx) error {
-		// Tambahkan header default untuk semua respons
 		c.Set("X-Powered-By", "Fiber")
 		c.Set("Content-Type", "application/json")
 		return c.Next()
 	})
 
+	// Swagger
+	app.Get("/swagger/*", fiberSwagger.WrapHandler)
+
 	// Rute untuk restoran
+	// @Summary Get list of restaurants
+	// @Description Mendapatkan daftar restoran
+	// @Tags Restaurants
+	// @Accept json
+	// @Produce json
+	// @Success 200 {array} []handler.RestaurantResponse
+	// @Router /restaurants [get]
 	app.Get("/restaurants", restaurantHandler.GetRestaurants)
+
+	// @Summary Add a new restaurant
+	// @Description Menambahkan restoran baru
+	// @Tags Restaurants
+	// @Accept json
+	// @Produce json
+	// @Param restaurant body handler.RestaurantRequest true "Restaurant Data"
+	// @Success 201 {object} handler.RestaurantResponse
+	// @Router /restaurants [post]
 	app.Post("/restaurants", restaurantHandler.AddRestaurant)
 
 	// Rute untuk users
+	// @Summary Login user
+	// @Description Melakukan login user
+	// @Tags Users
+	// @Accept json
+	// @Produce json
+	// @Param user body handler.LoginRequest true "User Data"
+	// @Success 200 {object} handler.LoginResponse
+	// @Router /users [get]
 	app.Get("/users", userHandler.LoginUser)
+
+	// @Summary Register user
+	// @Description Registrasi user baru
+	// @Tags Users
+	// @Accept json
+	// @Produce json
+	// @Param user body handler.RegisterRequest true "User Data"
+	// @Success 201 {object} handler.RegisterResponse
+	// @Router /users [post]
 	app.Post("/users", userHandler.RegisterUser)
 
 	// Jalankan server
