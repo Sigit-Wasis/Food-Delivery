@@ -39,8 +39,8 @@ The Admin Module is the control center of the system, allowing for:
 
 ## Technologies
 - **Frontend**: React, HTML, CSS
-- **Backend**: Node.js, Express
-- **Database**: MongoDB / PostgreSQL
+- **Backend**: Golang, Go Fiber
+- **Database**: PostgreSQL
 - **Authentication**: JWT / OAuth
 
 ## High-Level Architecture
