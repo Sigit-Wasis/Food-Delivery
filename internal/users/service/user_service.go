@@ -41,3 +41,8 @@ func (s *UserService) LoginUser(email, password string) (*models.User, error) {
 
 	return user, nil
 }
+
+// GetUsers mengambil semua daftar user
+func (s *UserService) GetUsers() ([]models.User, error) {
+	return s.Repo.GetAllUsers()
+}
