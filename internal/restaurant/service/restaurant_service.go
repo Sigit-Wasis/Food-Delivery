@@ -28,3 +28,7 @@ func (s *RestaurantService) CreateRestaurant(restaurant models.Restaurant) error
 	
 	return s.Repo.AddRestaurant(restaurant)
 }
+
+func (s *RestaurantService) DeleteRestaurant(id int) error {
+	return s.Repo.DeleteRestaurant(id)
+}

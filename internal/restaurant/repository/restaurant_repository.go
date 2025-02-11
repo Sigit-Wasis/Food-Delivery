@@ -56,3 +56,9 @@ func (r *RestaurantRepository) AddRestaurant(restaurant models.Restaurant) error
 	}
 	return nil
 }
+
+func (r *RestaurantRepository) DeleteRestaurant(id int) error {
+	query := "DELETE FROM restaurants WHERE id = $1"
+	_, err := r.DB.Exec(query, id)
+	return err
+}

@@ -122,3 +122,36 @@ func (h *RestaurantHandler) AddRestaurant(c *fiber.Ctx) error {
 		nil,
 	))
 }
+
+// DeleteRestaurant menghapus restoran berdasarkan ID
+func (h *RestaurantHandler) DeleteRestaurant(c *fiber.Ctx) error {
+	// Ambil ID dari parameter URL
+	idStr := c.Params("id")
+
+	// Konversi ID menjadi integer
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		return response.SendResponse(c, response.NewErrorResponse(
+			fiber.StatusBadRequest,
+			"Invalid restaurant ID",
+			"Restaurant ID must be a number",
+		))
+	}
+
+	// Panggil service untuk menghapus restoran
+	err = h.Service.DeleteRestaurant(id)
+	if err != nil {
+		return response.SendResponse(c, response.NewErrorResponse(
+			fiber.StatusInternalServerError,
+			"Failed to delete restaurant",
+			err.Error(),
+		))
+	}
+
+	// Kirim respons sukses
+	return response.SendResponse(c, response.NewSuccessResponse(
+		fiber.StatusOK,
+		"Restaurant deleted successfully",
+		nil,
+	))
+}
