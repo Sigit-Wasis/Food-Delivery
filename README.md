@@ -69,4 +69,9 @@ Prinsip	Status	Catatan
 
 ## License
 
+## Reference
+
+Arsitektur Perangkat Lunak Modular
+https://dashdevs.com/blog/modular-architecture-in-mobile-development/
+
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
