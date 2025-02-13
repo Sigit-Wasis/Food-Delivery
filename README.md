@@ -66,36 +66,34 @@ Prinsip	Status	Catatan
 | **Logging**                   | ✅         | Logging error di server untuk debugging                 |
 | **Status Code yang Tepat**    | ✅         | Gunakan status code yang sesuai untuk setiap jenis respons |
 
-## Router
 
-# API Documentation
+## API Documentation
 
-## Base Path
+### Base Path
 ```
 /api
 ```
 
-## Endpoints
+### Endpoints
 
-### Users
+#### Users
 | Method | Endpoint               | Description            |
 |--------|------------------------|------------------------|
 | GET    | `/api/users`           | Ambil daftar user      |
 | POST   | `/api/users/register`  | Registrasi user       |
 | POST   | `/api/users/login`     | Login user            |
 
-### Restaurants
+#### Restaurants
 | Method | Endpoint               | Description            |
 |--------|------------------------|------------------------|
 | GET    | `/api/restaurants`     | Ambil daftar restoran  |
 | POST   | `/api/restaurants`     | Tambah restoran       |
 
-
-## License
-
 ## Reference
 
 Arsitektur Perangkat Lunak Modular
 https://dashdevs.com/blog/modular-architecture-in-mobile-development/
+
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
