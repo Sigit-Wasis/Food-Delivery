@@ -7,9 +7,11 @@ import (
 	"food-delivery/internal/database"
 	"food-delivery/internal/restaurant/handler"
 	"food-delivery/internal/restaurant/repository"
+	restaurantRoutes "food-delivery/internal/restaurant/routes"
 	"food-delivery/internal/restaurant/service"
 	userHandler "food-delivery/internal/users/handler"
 	userRepository "food-delivery/internal/users/repository"
+	userRoutes "food-delivery/internal/users/routes"
 	userService "food-delivery/internal/users/service"
 
 	"github.com/gofiber/fiber/v2"
@@ -65,51 +67,20 @@ func main() {
 		return c.Next()
 	})
 
-	// Swagger
+	// Swagger Documentation
 	app.Get("/swagger/*", fiberSwagger.WrapHandler)
 
-	// Rute untuk restoran
-	// @Summary Get list of restaurants
-	// @Description Mendapatkan daftar restoran
-	// @Tags Restaurants
-	// @Accept json
-	// @Produce json
-	// @Success 200 {array} []handler.RestaurantResponse
-	// @Router /restaurants [get]
-	app.Get("/restaurants", restaurantHandler.GetRestaurants)
+	// Grouping Routes
+	api := app.Group("/api")
 
-	// @Summary Add a new restaurant
-	// @Description Menambahkan restoran baru
-	// @Tags Restaurants
-	// @Accept json
-	// @Produce json
-	// @Param restaurant body handler.RestaurantRequest true "Restaurant Data"
-	// @Success 201 {object} handler.RestaurantResponse
-	// @Router /restaurants [post]
-	app.Post("/restaurants", restaurantHandler.AddRestaurant)
+	// Grouping untuk Users
+	userGroup := api.Group("/users")
+	userRoutes.UserRoutes(userGroup, userHandler)
 
-	// Rute untuk users
-	// @Summary Login user
-	// @Description Melakukan login user
-	// @Tags Users
-	// @Accept json
-	// @Produce json
-	// @Param user body handler.LoginRequest true "User Data"
-	// @Success 200 {object} handler.LoginResponse
-	// @Router /users [get]
-	app.Get("/users", userHandler.LoginUser)
+	// Grouping untuk Restaurants
+	restaurantGroup := api.Group("/restaurants")
+	restaurantRoutes.RestaurantRoutes(restaurantGroup, restaurantHandler)
 
-	// @Summary Register user
-	// @Description Registrasi user baru
-	// @Tags Users
-	// @Accept json
-	// @Produce json
-	// @Param user body handler.RegisterRequest true "User Data"
-	// @Success 201 {object} handler.RegisterResponse
-	// @Router /users [post]
-	app.Post("/users", userHandler.RegisterUser)
-
-	// Jalankan server
 	log.Println("Server running on http://localhost:4000")
 	log.Fatal(app.Listen(":4000"))
 }

@@ -61,7 +61,16 @@ func (h *UserHandler) LoginUser(c *fiber.Ctx) error {
 func (h *UserHandler) Index(c *fiber.Ctx) error {
 	users, err := h.Service.GetUsers()
 	if err != nil {
-		return response.SendResponse(c, response.NewErrorResponse(fiber.StatusInternalServerError, "Failed to retrieve users", err.Error()))
+		return response.SendResponse(c, response.NewErrorResponse(
+			fiber.StatusInternalServerError,
+			"Failed to retrieve users",
+			err.Error(),
+		))
 	}
-	return response.SendResponse(c, response.NewSuccessResponse(fiber.StatusOK, "Users retrieved successfully", users))
+	
+	return response.SendResponse(c, response.NewSuccessResponse(
+		fiber.StatusOK,
+		"Users retrieved successfully",
+		users,
+	))
 }
