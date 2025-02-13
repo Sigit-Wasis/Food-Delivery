@@ -66,6 +66,26 @@ Prinsip	Status	Catatan
 | **Logging**                   | ✅         | Logging error di server untuk debugging                 |
 | **Status Code yang Tepat**    | ✅         | Gunakan status code yang sesuai untuk setiap jenis respons |
 
+## Router
+
+✅ Base Path API: /api
+✅ Grouping Users di /api/users
+✅ Grouping Restaurants di /api/restaurants
+✅ Swagger Documentation tetap berfungsi
+
+🛠️ Endpoint Baru:
+
+### Users
+
+GET /api/users → Ambil daftar user
+POST /api/users/register → Registrasi user
+POST /api/users/login → Login user
+
+### Restaurants
+
+GET /api/restaurants → Ambil daftar restoran
+POST /api/restaurants → Tambah restoran
+
 
 ## License
 
