@@ -57,7 +57,15 @@ func (h *UserHandler) LoginUser(c *fiber.Ctx) error {
 	return response.SendResponse(c, response.NewSuccessResponse(fiber.StatusOK, "Login successful", user))
 }
 
-// Index menangani permintaan daftar user
+// GetUsers mendapatkan daftar pengguna
+// @Summary Get all users
+// @Description Mendapatkan semua data pengguna yang terdaftar
+// @Tags users
+// @Accept json
+// @Produce json
+// @Success 200 {array} map[string]interface{} "Berhasil mendapatkan daftar user"
+// @Failure 500 {object} map[string]interface{} "Terjadi kesalahan server"
+// @Router /users [get]
 func (h *UserHandler) Index(c *fiber.Ctx) error {
 	users, err := h.Service.GetUsers()
 	if err != nil {
@@ -67,7 +75,7 @@ func (h *UserHandler) Index(c *fiber.Ctx) error {
 			err.Error(),
 		))
 	}
-	
+
 	return response.SendResponse(c, response.NewSuccessResponse(
 		fiber.StatusOK,
 		"Users retrieved successfully",

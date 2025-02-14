@@ -14,6 +14,8 @@ import (
 	userRoutes "food-delivery/internal/users/routes"
 	userService "food-delivery/internal/users/service"
 
+	_ "food-delivery/docs"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
@@ -69,6 +71,8 @@ func main() {
 
 	// Swagger Documentation
 	app.Get("/swagger/*", fiberSwagger.WrapHandler)
+	// Menyajikan file static dari folder docs
+	app.Static("/docs", "./docs") // Folder docs akan dapat diakses di http://localhost:4000/docs/
 
 	// Grouping Routes
 	api := app.Group("/api")

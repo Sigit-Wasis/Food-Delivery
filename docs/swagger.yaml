@@ -5,5 +5,28 @@ info:
   description: API untuk layanan food delivery
   title: Food Delivery API
   version: "1.0"
-paths: {}
+paths:
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: Mendapatkan semua data pengguna yang terdaftar
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Berhasil mendapatkan daftar user
+          schema:
+            items:
+              additionalProperties: true
+              type: object
+            type: array
+        "500":
+          description: Terjadi kesalahan server
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get all users
+      tags:
+      - users
 swagger: "2.0"

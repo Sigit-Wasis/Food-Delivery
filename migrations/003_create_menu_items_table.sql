@@ -7,6 +7,6 @@ CREATE TABLE IF NOT EXISTS menu_items (
     price           DECIMAL(10,2)   NOT NULL,
     image           VARCHAR(255)    DEFAULT NULL,
     created_at      TIMESTAMP       DEFAULT CURRENT_TIMESTAMP,
-    updated_at      TIMESTAMP       DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    updated_at      TIMESTAMP       DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (restaurant_id) REFERENCES restaurants(id) ON DELETE CASCADE
 );

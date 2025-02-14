@@ -17,8 +17,8 @@ func NewUserRepository(db *sql.DB) *UserRepository {
 
 func (r *UserRepository) GetUserByEmail(email string) (*models.User, error) {
 	var user models.User
-	query := "SELECT id, name, email, password, role FROM users WHERE email = $1"
-	err := r.DB.QueryRow(query, email).Scan(&user.ID, &user.Name, &user.Email, &user.Password, &user.Role)
+	query := "SELECT id, username, email, password, role FROM users WHERE email = $1"
+	err := r.DB.QueryRow(query, email).Scan(&user.ID, &user.Username, &user.Email, &user.Password, &user.Role)
 	if err == sql.ErrNoRows {
 		return nil, errors.New("user not found")
 	} else if err != nil {
@@ -28,14 +28,14 @@ func (r *UserRepository) GetUserByEmail(email string) (*models.User, error) {
 }
 
 func (r *UserRepository) CreateUser(user models.User) error {
-	query := "INSERT INTO users (name, email, password, role) VALUES ($1, $2, $3, $4)"
-	_, err := r.DB.Exec(query, user.Name, user.Email, user.Password, user.Role)
+	query := "INSERT INTO users (username, email, password, role) VALUES ($1, $2, $3, $4)"
+	_, err := r.DB.Exec(query, user.Username, user.Email, user.Password, user.Role)
 	return err
 }
 
 // GetAllUsers mengambil semua daftar user dari database
 func (r *UserRepository) GetAllUsers() ([]models.User, error) {
-	rows, err := r.DB.Query("SELECT id, name, email, role FROM users")
+	rows, err := r.DB.Query("SELECT id, username, email, role FROM users")
 	if err != nil {
 		return nil, err
 	}
@@ -44,7 +44,7 @@ func (r *UserRepository) GetAllUsers() ([]models.User, error) {
 	var users []models.User
 	for rows.Next() {
 		var user models.User
-		if err := rows.Scan(&user.ID, &user.Name, &user.Email, &user.Role); err != nil {
+		if err := rows.Scan(&user.ID, &user.Username, &user.Email, &user.Role); err != nil {
 			return nil, err
 		}
 		users = append(users, user)
