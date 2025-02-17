@@ -57,3 +57,23 @@ func (r *UserRepository) GetAllUsers() ([]models.User, error) {
 
 	return users, nil
 }
+
+// Delete user by ID
+func (r *UserRepository) DeleteUser(id int) error {
+	query := "DELETE FROM users WHERE id = $1"
+	res, err := r.DB.Exec(query, id)
+	if err != nil {
+		return err
+	}
+
+	rowsAffected, err := res.RowsAffected()
+	if err != nil {
+		return err
+	}
+
+	if rowsAffected == 0 {
+		return errors.New("user not found")
+	}
+
+	return nil
+}

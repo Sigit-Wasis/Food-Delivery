@@ -4,6 +4,7 @@ import (
 	"food-delivery/internal/users/models"
 	"food-delivery/internal/users/service"
 	"food-delivery/pkg/response"
+	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -80,5 +81,35 @@ func (h *UserHandler) Index(c *fiber.Ctx) error {
 		fiber.StatusOK,
 		"Users retrieved successfully",
 		users,
+	))
+}
+
+// Delete user handler
+func (h *UserHandler) DeleteUser(c *fiber.Ctx) error {
+	// Ambil parameter ID
+	idParam := c.Params("id")
+	id, err := strconv.Atoi(idParam)
+	if err != nil {
+		return response.SendResponse(c, response.NewErrorResponse(
+			fiber.StatusBadRequest, "Invalid ID format", err.Error(),
+		))
+	}
+
+	// Panggil service untuk menghapus user
+	err = h.Service.DeleteUser(id)
+	if err != nil {
+		if err.Error() == "user not found" {
+			return response.SendResponse(c, response.NewErrorResponse(
+				fiber.StatusNotFound, "User not found", "",
+			))
+		}
+		return response.SendResponse(c, response.NewErrorResponse(
+			fiber.StatusInternalServerError, "Failed to delete user", err.Error(),
+		))
+	}
+
+	// Berhasil dihapus
+	return response.SendResponse(c, response.NewSuccessResponse(
+		fiber.StatusOK, "User deleted successfully", nil,
 	))
 }

@@ -46,3 +46,17 @@ func (s *UserService) LoginUser(email, password string) (*models.User, error) {
 func (s *UserService) GetUsers() ([]models.User, error) {
 	return s.Repo.GetAllUsers()
 }
+
+// Delete user service
+func (s *UserService) DeleteUser(id int) error {
+	// Cek apakah user ada sebelum menghapus
+	err := s.Repo.DeleteUser(id)
+	if err != nil {
+		if err.Error() == "user not found" {
+			return errors.New("user not found")
+		}
+		return err
+	}
+
+	return nil
+}
