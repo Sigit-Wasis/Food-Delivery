@@ -13,4 +13,5 @@ func UserRoutes(router fiber.Router, handler *handler.UserHandler) {
 	router.Post("/register", handler.RegisterUser) // Registrasi user baru
 	router.Post("/login", handler.LoginUser) // Login user
 	router.Delete("/:id", handler.DeleteUser)
+	router.Put("/:id/password", handler.UpdatePassword) // update password
 }

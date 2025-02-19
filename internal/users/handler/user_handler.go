@@ -84,6 +84,55 @@ func (h *UserHandler) Index(c *fiber.Ctx) error {
 	))
 }
 
+type UpdatePasswordRequest struct {
+	NewPassword string `json:"new_password"`
+}
+
+// Handler untuk update password user
+func (h *UserHandler) UpdatePassword(c *fiber.Ctx) error {
+	// Ambil parameter ID
+	idParam := c.Params("id")
+	id, err := strconv.Atoi(idParam)
+	if err != nil {
+		return response.SendResponse(c, response.NewErrorResponse(
+			fiber.StatusBadRequest, "Invalid ID format", err.Error(),
+		))
+	}
+
+	// Parse request body
+	var req UpdatePasswordRequest
+	if err := c.BodyParser(&req); err != nil {
+		return response.SendResponse(c, response.NewErrorResponse(
+			fiber.StatusBadRequest, "Invalid request body", err.Error(),
+		))
+	}
+
+	// Validasi password baru
+	if req.NewPassword == "" {
+		return response.SendResponse(c, response.NewErrorResponse(
+			fiber.StatusBadRequest, "New password cannot be empty", "",
+		))
+	}
+
+	// Panggil service untuk update password
+	err = h.Service.UpdatePassword(id, req.NewPassword)
+	if err != nil {
+		if err.Error() == "user not found" {
+			return response.SendResponse(c, response.NewErrorResponse(
+				fiber.StatusNotFound, "User not found", "",
+			))
+		}
+		return response.SendResponse(c, response.NewErrorResponse(
+			fiber.StatusInternalServerError, "Failed to update password", err.Error(),
+		))
+	}
+
+	// Berhasil diupdate
+	return response.SendResponse(c, response.NewSuccessResponse(
+		fiber.StatusOK, "Password updated successfully", nil,
+	))
+}
+
 // Delete user handler
 func (h *UserHandler) DeleteUser(c *fiber.Ctx) error {
 	// Ambil parameter ID

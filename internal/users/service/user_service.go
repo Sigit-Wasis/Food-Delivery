@@ -47,6 +47,30 @@ func (s *UserService) GetUsers() ([]models.User, error) {
 	return s.Repo.GetAllUsers()
 }
 
+// Update user password
+func (s *UserService) UpdatePassword(id int, newPassword string) error {
+	if len(newPassword) < 6 {
+		return errors.New("password must be at least 6 characters long")
+	}
+
+	// Hash password sebelum menyimpan ke database
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(newPassword), bcrypt.DefaultCost)
+	if err != nil {
+		return err
+	}
+
+	// Update password ke database
+	err = s.Repo.UpdatePassword(id, string(hashedPassword))
+	if err != nil {
+		if err.Error() == "user not found" {
+			return errors.New("user not found")
+		}
+		return err
+	}
+
+	return nil
+}
+
 // Delete user service
 func (s *UserService) DeleteUser(id int) error {
 	// Cek apakah user ada sebelum menghapus

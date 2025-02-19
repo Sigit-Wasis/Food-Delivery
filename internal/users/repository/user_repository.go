@@ -58,6 +58,26 @@ func (r *UserRepository) GetAllUsers() ([]models.User, error) {
 	return users, nil
 }
 
+// Update password user
+func (r *UserRepository) UpdatePassword(id int, hashedPassword string) error {
+	query := "UPDATE users SET password = $1 WHERE id = $2"
+	res, err := r.DB.Exec(query, hashedPassword, id)
+	if err != nil {
+		return err
+	}
+
+	rowsAffected, err := res.RowsAffected()
+	if err != nil {
+		return err
+	}
+
+	if rowsAffected == 0 {
+		return errors.New("user not found")
+	}
+
+	return nil
+}
+
 // Delete user by ID
 func (r *UserRepository) DeleteUser(id int) error {
 	query := "DELETE FROM users WHERE id = $1"
