@@ -123,6 +123,36 @@ func (h *RestaurantHandler) AddRestaurant(c *fiber.Ctx) error {
 	))
 }
 
+// Handler untuk mendapatkan restoran berdasarkan ID
+func (h *RestaurantHandler) GetRestaurantByID(c *fiber.Ctx) error {
+	// Ambil parameter ID
+	idParam := c.Params("id")
+	id, err := strconv.Atoi(idParam)
+	if err != nil {
+		return response.SendResponse(c, response.NewErrorResponse(
+			fiber.StatusBadRequest, "Invalid ID format", err.Error(),
+		))
+	}
+
+	// Panggil service untuk mendapatkan restoran
+	restaurant, err := h.Service.GetRestaurantByID(id)
+	if err != nil {
+		if err.Error() == "restaurant not found" {
+			return response.SendResponse(c, response.NewErrorResponse(
+				fiber.StatusNotFound, "Restaurant not found", "",
+			))
+		}
+		return response.SendResponse(c, response.NewErrorResponse(
+			fiber.StatusInternalServerError, "Failed to fetch restaurant", err.Error(),
+		))
+	}
+
+	// Berhasil mendapatkan data
+	return response.SendResponse(c, response.NewSuccessResponse(
+		fiber.StatusOK, "Restaurant retrieved successfully", restaurant,
+	))
+}
+
 // DeleteRestaurant menghapus restoran berdasarkan ID
 func (h *RestaurantHandler) DeleteRestaurant(c *fiber.Ctx) error {
 	// Ambil ID dari parameter URL

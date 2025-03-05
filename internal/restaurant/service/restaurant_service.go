@@ -2,6 +2,7 @@
 package service
 
 import (
+	"errors"
 	"fmt"
 	"food-delivery/internal/restaurant/models"
 	"food-delivery/internal/restaurant/repository"
@@ -27,6 +28,17 @@ func (s *RestaurantService) CreateRestaurant(restaurant models.Restaurant) error
 	}
 	
 	return s.Repo.AddRestaurant(restaurant)
+}
+
+func (s *RestaurantService) GetRestaurantByID(id int) (*models.Restaurant, error) {
+	restaurant, err := s.Repo.GetRestaurantByID(id)
+	if err != nil {
+		if err.Error() == "restaurant not found" {
+			return nil, errors.New("restaurant not found")
+		}
+		return nil, err
+	}
+	return restaurant, nil
 }
 
 func (s *RestaurantService) DeleteRestaurant(id int) error {

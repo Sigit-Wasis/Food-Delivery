@@ -3,6 +3,7 @@ package repository
 
 import (
 	"database/sql"
+	"errors"
 
 	"food-delivery/internal/restaurant/models"
 )
@@ -55,6 +56,19 @@ func (r *RestaurantRepository) AddRestaurant(restaurant models.Restaurant) error
 		return err
 	}
 	return nil
+}
+
+func (r *RestaurantRepository) GetRestaurantByID(id int) (*models.Restaurant, error) {
+	var restaurant models.Restaurant
+	query := "SELECT id, name, address, cuisine_type, rating FROM restaurants WHERE id = $1"
+	err := r.DB.QueryRow(query, id).Scan(&restaurant.ID, &restaurant.Name, &restaurant.Address, &restaurant.CuisineType, &restaurant.Rating)
+	if err == sql.ErrNoRows {
+		return nil, errors.New("restaurant not found")
+	} else if err != nil {
+		return nil, err
+	}
+
+	return &restaurant, nil
 }
 
 func (r *RestaurantRepository) DeleteRestaurant(id int) error {
